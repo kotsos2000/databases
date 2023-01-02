@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ConductorCheck</title>
+<style>
+body {background-color: #DDFCE4;}
+h1   {color: black; font-family:verdana; font-size:300%}
+p1   {color: black;font-family:Times New Roman; font-size:200% ;   }
+div.a { position: relative; text-align: center; top:100px }
+header   { position: sticky; text-align: center; top: 10px  }
+#img1 {position: absolute ; top:-40px  ; left: -10px; }
+hr {position: relative; top:1px}
+.btn{ padding: 10px; color: black; background-color: #D8CFAF; }
+.back { height: 25px; width:50px; position: absolute; top: 20px; right:0px }
+div.buttons {color: black;font-family:Times New Roman; font-size:150% ;   }
+
+</style>
+</head>
+
+
+<body>
+<header>
+  <img id="img1" src="images/b7l.jpg" width="200"> <span>
+  <h1>Public Transport DB</h1> </span>
+  <button class="back"><a href="driver.html">&lt;Back</a></button>
+  <hr>
+</header>
+<div class="a">
+<p1>Give the details of the Check</p1>
+    
+        <div class="b">
+            <form action="/" method="post" style="margin-bottom: 10px;">
+                <div class="buttons">
+                  <label for="itineraryid">ItineraryID:</label>
+                  <input type="text" id="itineraryid" name="your_itineraryid">
+                  <label for="driverssn">YourSSN:</label>
+                  <input type="text" id="driverssn" name="your_driverssn">
+                  <label for="lineid">LineID:</label>
+                  <input type="text" id="lineid" name="your_lineid">
+                  <label for="direction">Direction:</label>
+                  <input type="text" id="direction" name="your_direction">
+                  <input type="submit" value="Submit">  
+                </div>
+              </form>
+          </div>
+  </div>
+</body>
+</html> 
