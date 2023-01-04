@@ -6,6 +6,5 @@ header   { position: sticky; text-align: center; top: 10px  }
 #img1 {position: absolute ; top:-40px  ; left: -10px; }
 hr {position: relative; top:1px}
 .btn{ padding: 10px; color: black; background-color: #D8CFAF; }
-
 .back { height: 25px; width:50px; position: absolute; top: 20px; right:0px }
 div.buttons {color: black;font-family:Times New Roman; font-size:150% ;   }

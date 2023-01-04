@@ -1,11 +1,3 @@
-###################### SQL INJECTION EXAMPLE ######################
-# Caution: this script is for demonstration purpose only! This is #
-# obviously not the way one should do stuff to create a server in #
-# python and connect MySQL to  it. There are important security   #
-# issues in this script, thus it is useful only for injections.   #
-###################################################################
-# Running this script requires installing the MySQLdb lib, which  #
-# can be installed using the command: pip install mysqlclient     #
 ###################################################################
 # To execute the script, run 'python example.py' (file index.html #
 # must be in the same directory. Then, use your browser to go to  #
@@ -26,7 +18,7 @@ try:
 except:
 	from http.server import BaseHTTPRequestHandler, HTTPServer # for python 3
 
-db = MySQLdb.connect(host="localhost", user="student", passwd="student", db="student")
+#db = MySQLdb.connect(host="your_hostname", user="your_username", passwd="your_password", db="publictransportdb")
 cur = db.cursor()
 
 def execute_command(cursor, sql_command):
@@ -54,40 +46,175 @@ class myHandler(BaseHTTPRequestHandler):
 			return
 		except IOError:
 			self.send_error(404,'File Not Found: %s' % self.path)
-
+    
 	def do_POST(self):
 		if self.path=="/":
 			form = cgi.FieldStorage(fp=self.rfile, headers=self.headers,
 						environ={'REQUEST_METHOD':'POST', 'CONTENT_TYPE':self.headers['Content-Type']})
-			self.path="/index.html"
+			self.path="/queries.html"
 		try:
 			f = open(curdir + sep + self.path) 
 			self.send_response(200)
 			self.send_header('Content-type', 'text/html')
 			self.end_headers()
 			self.write_to_page(f.read())
-			if "your_id" in form:
-				self.write_to_page("The performer id you gave is %s" % str(form["your_id"].value))
-				query = "SELECT * FROM performers WHERE id = " + form["your_id"].value
+			if "your_lineid" in form:
+				c=0
+				for x in str(form["your_lineid"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				if(c==0):
+					self.write_to_page("<div class=\"gen\">The Line ID you gave is %s" % str(form["your_lineid"].value))
+					query = "SELECT * FROM line WHERE lineid = " + form["your_lineid"].value
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<br>Database Data for the line: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+			if "your_linename" in form:
+				c=0
+				for x in str(form["your_linename"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1   
+				if(c==0):
+					self.write_to_page("<div class=\"gen\">The Line name you gave is %s" % str(form["your_linename"].value))
+					query = "SELECT * FROM line WHERE linename like \"%" + form["your_linename"].value+"%\" "
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<br>Database Data for the line: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+			if "your_stopid" in form:
+				c=0
+				for x in str(form["your_stopid"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				if(c==0):
+					self.write_to_page("<div class=\"gen\">The Stop ID you gave is %s" % str(form["your_stopid"].value))
+					query = "SELECT * FROM stop WHERE stopid = " + form["your_stopid"].value
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<br>Database Data for the Stop: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+			if "your_stopname" in form:
+				c=0
+				for x in str(form["your_stopname"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				if(c==0):
+					self.write_to_page("<div class=\"gen\">The Stop Name you gave is %s" % str(form["your_stopname"].value))
+					query = "SELECT * FROM stop WHERE stopname like \"%" + form["your_stopname"].value+"%\" "
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<br>Database Data for the Stop: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+                        
+			if "your_linestopid" in form:
+				c=0
+				for x in str(form["your_linestopid"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				if(c==0):
+					self.write_to_page("<div class=\"gen\">The Line ID you gave is %s" % str(form["your_linestopid"].value))
+					query = "SELECT * FROM line_has_stop WHERE lineid = " + form["your_linestopid"].value
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<br>Database Data for the line: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+			if "your_stoplineid" in form:
+				c=0
+				for x in str(form["your_stoplineid"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				if(c==0):
+					self.write_to_page("<div class=\"gen\">The Stop ID you gave is %s" % str(form["your_stoplineid"].value))
+					query = "SELECT * FROM line_has_stop WHERE stopid = " + form["your_stoplineid"].value
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<br>Database Data for the Stop: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+                        
+			if ("your_itinerarylineid" and "your_itinerarydirection") in form:
+				c=0
+				for x in str(form["your_itinerarylineid"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				for x in str(form["your_itinerarydirection"].value):
+					if (x==";"):
+								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
+								c+=1             
+				if(c==0):
+					query = "SELECT itineraryid,vehicleid FROM itinerary WHERE lineid =" + form["your_itinerarylineid"].value +" and direction=\"" + form["your_itinerarydirection"].value+"\""
+					#self.write_to_page("<br>Query: [" + query + "]")
+					self.write_to_page("<div class=\"gen\"><br>Database Data: <br> </div>")
+					execute_command(cur, query)
+					for row in cur.fetchall():
+						self.write_to_page("<div class=\"gen\">")
+						self.write_to_page(row)
+						self.write_to_page("<br>")
+						self.write_to_page("</div>")
+			if "your_itinerarylineid" in form and "your_itinerarydirection" not in form:
+				self.write_to_page(" <div class=\"gen\">Please also provide the Direction</div> ")                
+			if "your_drivervalues" in form:
+				query ="INSERT INTO itinerary(itineraryid,driverssn,lineid,direction,vehicleid) VALUES"+str(form["your_drivervalues"].value)
 				#self.write_to_page("<br>Query: [" + query + "]")
-				self.write_to_page("<br>Database Data for the performer: <br>")
+				self.write_to_page("<div class=\"gen\"><br>Successfully added to Database!<br> </div>")
+				execute_command(cur, query)
+			if "your_conductorvalues" in form:
+				query ="INSERT INTO Itinerary_Has_Conductor(Itineraryid,ConductorSSN,LineID,Direction) VALUES"+str(form["your_conductorvalues"].value)
+				#self.write_to_page("<br>Query: [" + query + "]")
+				self.write_to_page("<div class=\"gen\"><br>Successfully added to Database!<br> </div>")
+				execute_command(cur, query)
+			if "your_adminrest" in form:
+				query = str(form["your_adminrest"].value)
+				#self.write_to_page("<br>Query: [" + query + "]")
+				self.write_to_page("<div class=\"gen\"><br>Successfully committed query<br> </div>")
+				execute_command(cur, query)
+			if "your_adminselect" in form:
+				self.write_to_page("<div class=\"gen\">The query you gave is %s" % str(form["your_adminselect"].value))
+				query = str(form["your_adminselect"].value)
+				#self.write_to_page("<br>Query: [" + query + "]")
+				self.write_to_page("<br>Database Data for your query: <br> </div>")
 				execute_command(cur, query)
 				for row in cur.fetchall():
+					self.write_to_page("<div class=\"gen\">")
 					self.write_to_page(row)
 					self.write_to_page("<br>")
-			else:
-				self.write_to_page("The performer you gave is %s" % form["your_name"].value)
-				query = "SELECT * FROM performers WHERE name = \"" + form["your_name"].value + "\""
-				#self.write_to_page("<br>Query: [" + query + "]")
-				self.write_to_page("<br>Database Data for the performer: <br>")
-				execute_command(cur, query)
-				for row in cur.fetchall():
-					self.write_to_page(row)
-					self.write_to_page("<br>")
-			f.close()
+					self.write_to_page("</div>")
+			f.close() 
 			return
 		except IOError:
 			self.send_error(404,'File Not Found: %s' % self.path)
+
 
 try:
 	server = HTTPServer(('', 8000), myHandler)
@@ -98,4 +225,3 @@ except KeyboardInterrupt:
 	server.socket.close()
 
 db.close()
-
