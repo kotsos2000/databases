@@ -1,0 +1,81 @@
+a {
+  color: black;
+text-decoration: none;
+
+}
+
+
+body {background-color: #DDFCE4; height: 100%; margin: 0px;}
+h1   {color: black; font-family:verdana; font-size:300%; }
+p1   {color: black;font-family:Times New Roman; font-size:200% ;   }
+div.a { position: relative; text-align: center; top:100px }
+header   { position: static; text-align: center; top: 10px  }
+#img1 {position: absolute ; top:-7px  ; left: -10px }
+hr {position: relative; top:1px}
+.btn{ padding: 20px; color: black; background-color: #b6beed;  font-family: sans-serif;}
+.btn {
+  background-color: #41e4ea; /* Green */
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+div.oasth{
+  position: absolute;
+  top: 5px ;
+  right:10px;  
+}
+div.trans{
+  position: absolute;
+  bottom: 5%;
+  left:37%;
+
+}
+.back { height: 25px; width:50px; position: absolute; top: 20px; right:0px }
+div.buttons {color: black;font-family:Times New Roman; font-size:150% ;   }
+.wrapper {
+  position: relative;
+}
+.rr {color:crimson; position: fixed; bottom: 10px; right: 10px; font-size: 90%; font-family: fantasy; 
+  z-index: 1; background-color: #DDFCE4}
+.abc { height: 40px; width:800px; font-size: 100%;font-family:Times New Roman;position: relative; text-align: center;}
+.sp { position:relative; left:10px; }
+.sp2 { position:relative; left:20px; }
+p2   {color: black;font-family:Times New Roman; font-size:200% ; top: 50px;  position:relative; }
+div.abcd{font-size: 40%;}
+div.gen {color: black;font-family:Times New Roman; font-size:150% ; position: relative;  top:100px ; text-align: center }
+
+table {
+  border-collapse: collapse; /* Remove the space between cells */
+  width: 80%; /* Set the width of the table */
+  margin: 0 auto; /* Center the table on the page */
+}
+
+th, td {
+  border: 1px solid #dddddd; /* Add a border to the cells */
+  text-align: left; /* Align the text within the cells */
+  padding: 8px; /* Add some padding to the cells */
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd; /* Add a background color to every other row */
+}
+
+th {
+  background-color: #41e4ea; /* Add a background color to the column names */
+  color: white; /* Make the text white */
+}
+
+hr {
+  width: 80%; /* Set the width of the horizontal line */
+  margin: 0 auto; /* Center the line on the page */
+  border: 0; /* Remove the border */
+  height: 1px; /* Set the height of the line */
+  background-color: #dddddd; /* Add a background color to the line */
+}

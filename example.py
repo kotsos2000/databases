@@ -3,11 +3,11 @@
 # must be in the same directory. Then, use your browser to go to  #
 # http://localhost:8000/ and test how the service responds to     #
 # different input data. Scenarios to check:                       #
-# - Id = 8, Name = (whatever)                                     #
-# - Id = (empty), Name = Kylie Minogue                            #
-# - Id = 0 or 1=1, Name = (whatever)                              #
-# - Id = (empty), Name = " or ""="                                #
-# - Id = 0; DROP TABLE performers_tracks, Name = (whatever)       #
+# - LineID = 2, Name = a.s , ikea , κλπ                           #
+# - StopId = 13027, Name = Kamara                                 #
+# - ItineraryId = 81 , Direction = outward                        #
+# - Line has stop: lineId = 2, stopid = 1051                      #
+# - Admin: select * from vehicle                                  #
 ###################################################################
 
 import cgi
@@ -36,6 +36,22 @@ class myHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		if self.path=="/":
 			self.path="/index.html"
+		elif self.path.startswith("/images/"):  # Check if the request is for an image file
+			filename = self.path.split("/")[-1]
+			self.send_response(200)
+			self.send_header('Content-type', 'image/jpeg')
+			self.end_headers()
+			with open(f'images/{filename}', 'rb') as f:
+				self.wfile.write(f.read())
+			return
+		elif self.path.startswith("/css/"):  # Check if the request is for a .css file
+			filename = self.path.split("/")[-1]
+			self.send_response(200)
+			self.send_header('Content-type', 'text/css')
+			self.end_headers()
+			with open(f'css/{filename}', 'r', encoding='utf-8') as f:
+				self.wfile.write(f.read().encode())
+			return
 		try:
 			f = open(curdir + sep + self.path) 
 			self.send_response(200)
@@ -70,11 +86,26 @@ class myHandler(BaseHTTPRequestHandler):
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<br>Database Data for the line: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
+                    
 			if "your_linename" in form:
 				c=0
 				for x in str(form["your_linename"].value):
@@ -87,11 +118,25 @@ class myHandler(BaseHTTPRequestHandler):
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<br>Database Data for the line: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
 			if "your_stopid" in form:
 				c=0
 				for x in str(form["your_stopid"].value):
@@ -104,11 +149,25 @@ class myHandler(BaseHTTPRequestHandler):
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<br>Database Data for the Stop: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
 			if "your_stopname" in form:
 				c=0
 				for x in str(form["your_stopname"].value):
@@ -121,12 +180,25 @@ class myHandler(BaseHTTPRequestHandler):
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<br>Database Data for the Stop: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
-                        
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
 			if "your_linestopid" in form:
 				c=0
 				for x in str(form["your_linestopid"].value):
@@ -139,11 +211,25 @@ class myHandler(BaseHTTPRequestHandler):
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<br>Database Data for the line: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
 			if "your_stoplineid" in form:
 				c=0
 				for x in str(form["your_stoplineid"].value):
@@ -156,11 +242,25 @@ class myHandler(BaseHTTPRequestHandler):
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<br>Database Data for the Stop: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
                         
 			if ("your_itinerarylineid" and "your_itinerarydirection") in form:
 				c=0
@@ -173,24 +273,38 @@ class myHandler(BaseHTTPRequestHandler):
 								self.write_to_page(" <div class=\"gen\">Please dont SQL Inject</div> ")
 								c+=1             
 				if(c==0):
-					query = "SELECT itineraryid,vehicleid FROM itinerary WHERE lineid =" + form["your_itinerarylineid"].value +" and direction=\"" + form["your_itinerarydirection"].value+"\""
+					query = "SELECT ItineraryID,VehicleID FROM itinerary WHERE lineid =" + form["your_itinerarylineid"].value +" and direction=\"" + form["your_itinerarydirection"].value+"\""
 					#self.write_to_page("<br>Query: [" + query + "]")
 					self.write_to_page("<div class=\"gen\"><br>Database Data: <br> </div>")
 					execute_command(cur, query)
-					for row in cur.fetchall():
-						self.write_to_page("<div class=\"gen\">")
-						self.write_to_page(row)
-						self.write_to_page("<br>")
-						self.write_to_page("</div>")
+					cur.execute(query)
+					rows = cur.fetchall()
+					column_names = [column[0] for column in cur.description]
+					html_table = "<table>"
+					html_table += "<tr>"
+					for col in column_names:
+						html_table += "<th>" + col + "</th>"
+					html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					for row in rows:
+						html_table += "<tr>"
+						for col in row:
+							html_table += "<td>" + str(col) + "</td>"
+						html_table += "</tr>"
+					html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+					html_table += "</table>"
+					self.write_to_page("<div class=\"gen\">")
+					self.write_to_page(html_table)
+					self.write_to_page("</div>")
 			if "your_itinerarylineid" in form and "your_itinerarydirection" not in form:
 				self.write_to_page(" <div class=\"gen\">Please also provide the Direction</div> ")                
 			if "your_drivervalues" in form:
-				query ="INSERT INTO itinerary(itineraryid,driverssn,lineid,direction,vehicleid) VALUES"+str(form["your_drivervalues"].value)
+				query ="INSERT INTO itinerary(ItineraryID,driverssn,lineid,direction,VehicleID) VALUES"+str(form["your_drivervalues"].value)
 				#self.write_to_page("<br>Query: [" + query + "]")
 				self.write_to_page("<div class=\"gen\"><br>Successfully added to Database!<br> </div>")
 				execute_command(cur, query)
 			if "your_conductorvalues" in form:
-				query ="INSERT INTO Itinerary_Has_Conductor(Itineraryid,ConductorSSN,LineID,Direction) VALUES"+str(form["your_conductorvalues"].value)
+				query ="INSERT INTO Itinerary_Has_Conductor(ItineraryID,ConductorSSN,LineID,Direction) VALUES"+str(form["your_conductorvalues"].value)
 				#self.write_to_page("<br>Query: [" + query + "]")
 				self.write_to_page("<div class=\"gen\"><br>Successfully added to Database!<br> </div>")
 				execute_command(cur, query)
@@ -205,11 +319,25 @@ class myHandler(BaseHTTPRequestHandler):
 				#self.write_to_page("<br>Query: [" + query + "]")
 				self.write_to_page("<br>Database Data for your query: <br> </div>")
 				execute_command(cur, query)
-				for row in cur.fetchall():
-					self.write_to_page("<div class=\"gen\">")
-					self.write_to_page(row)
-					self.write_to_page("<br>")
-					self.write_to_page("</div>")
+				cur.execute(query)
+				rows = cur.fetchall()
+				column_names = [column[0] for column in cur.description]
+				html_table = "<table>"
+				html_table += "<tr>"
+				for col in column_names:
+					html_table += "<th>" + col + "</th>"
+				html_table += "</tr>"
+				html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+				for row in rows:
+					html_table += "<tr>"
+					for col in row:
+						html_table += "<td>" + str(col) + "</td>"
+					html_table += "</tr>"
+				html_table += "<tr><td colspan='" + str(len(column_names)) + "'><hr></td></tr>"
+				html_table += "</table>"
+				self.write_to_page("<div class=\"gen\">")
+				self.write_to_page(html_table)
+				self.write_to_page("</div>")
 			f.close() 
 			return
 		except IOError:
